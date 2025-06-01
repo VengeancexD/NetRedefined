@@ -1,0 +1,12 @@
+name: NetRedefined
+version: '1.0-SNAPSHOT'
+main: net.netrefined.NetRedefined
+api-version: '1.21'
+load: STARTUP
+authors:
+  - VengeancexD
+description: A Simple Minecraft Server Networking Stack Enhancing Tool To Help With Latency.
+commands:
+  ping:
+    description: Check the ping of yourself or another player.
+    usage: /ping [player]
