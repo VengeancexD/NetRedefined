@@ -5,42 +5,40 @@ plugins {
 }
 
 group = "net.netrefined"
-version = "1.0-SNAPSHOT"
+version = "1.0"
+description = "NetRedefined - Ultimate Networking Optimizer for Minecraft"
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
 
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://oss.sonatype.org/content/groups/public/")
+    maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://jitpack.io") // Optional: For other advanced libs
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("net.kyori:adventure-api:4.14.0")
-    compileOnly("net.kyori:adventure-platform-bukkit:4.1.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("io.netty:netty-all:4.1.94.Final")
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
+    compileOnly("io.netty:netty-all:4.2.1.Final")
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
 }
 
-kotlin {
-    jvmToolchain(21)
+tasks.jar {
+    archiveBaseName.set("NetRedefined")
+    archiveClassifier.set("")
+    archiveVersion.set(project.version.toString())
 }
 
-tasks {
-    processResources {
-        val props = mapOf("version" to project.version)
-        inputs.properties(props)
-        filteringCharset = "UTF-8"
-        filesMatching("plugin.yml") {
-            expand(props)
-        }
-    }
+tasks.shadowJar {
+    archiveClassifier.set("all")
+    relocate("kotlin", "net.netrefined.libs.kotlin") // Prevent classpath conflicts
+    minimize()
+}
 
-    build {
-        dependsOn(shadowJar)
-    }
-
-    runServer {
-        minecraftVersion("1.21")
-    }
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
