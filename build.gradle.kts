@@ -8,9 +8,6 @@ group = "net.netrefined"
 version = "1.0"
 description = "NetRedefined - Ultimate Networking Optimizer for Minecraft"
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-}
 
 repositories {
     mavenCentral()
@@ -26,19 +23,25 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
 }
+ kotlin {
+            jvmToolchain(21)
+        }
 
-tasks.jar {
-    archiveBaseName.set("NetRedefined")
-    archiveClassifier.set("")
-    archiveVersion.set(project.version.toString())
-}
+tasks {
+    processResources {
+        val props = mapOf("version" to project.version)
+        inputs.properties(props)
+        filteringCharset = "UTF-8"
+        filesMatching("plugin.yml") {
+            expand(props)
+        }
+    }
 
-tasks.shadowJar {
-    archiveClassifier.set("all")
-    relocate("kotlin", "net.netrefined.libs.kotlin") // Prevent classpath conflicts
-    minimize()
-}
+    build {
+        dependsOn(shadowJar)
+    }
 
-tasks.build {
-    dependsOn(tasks.shadowJar)
+    runServer {
+        minecraftVersion("1.21")
+    }
 }
