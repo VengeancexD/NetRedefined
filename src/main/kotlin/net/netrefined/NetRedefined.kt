@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION", "UNCHECKED_CAST")
 
-package net.redefined
+package net.refined
 
 import com.comphenix.protocol.*
 import com.comphenix.protocol.events.*
