@@ -2,6 +2,7 @@ name: NetRedefined
 version: '1.1'
 main: net.netrefined.NetRedefined
 api-version: '1.21'
+depends: [ProtocolLib]
 load: STARTUP
 authors:
   - VengeancexD
